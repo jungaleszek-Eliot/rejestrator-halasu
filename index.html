@@ -5,39 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Zaawansowany Rejestrator Hałasu</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#d32f2f">
+    <meta name="theme-color" content="#1D2D50">
     <style>
-        /* Styl wymuszający brak przewijania (100dvh i overflow hidden) */
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; text-align: center; background-color: #f0f4f8; color: #333; margin: 0; padding: 15px; height: 100dvh; display: flex; flex-direction: column; box-sizing: border-box; overflow: hidden; }
-        
-        h1 { font-size: 1.8rem; margin: 0 0 15px 0; }
-        
-        /* Nowy, poziomy miernik decybeli */
-        .meter-container { background: #222; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
-        #dbMeter { width: 100%; height: 35px; background-color: #111; border-radius: 6px; display: block; }
-        .meter-labels { display: flex; justify-content: space-between; color: #ddd; font-size: 0.9rem; font-weight: bold; margin-top: 8px; }
-        
-        /* Ukryty panel opcji */
-        details { background: #eef2f5; border-radius: 10px; margin-bottom: 15px; text-align: left; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
-        summary { padding: 15px; font-size: 1.1rem; font-weight: bold; cursor: pointer; list-style: none; display: flex; align-items: center; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; text-align: center; background-color: #F4F6F9; color: #2C3E50; margin: 0; padding: 15px; height: 100dvh; display: flex; flex-direction: column; box-sizing: border-box; overflow: hidden; }
+        h1 { font-size: 1.8rem; margin: 0 0 15px 0; color: #1D2D50; }
+        .meter-container { background: #1D2D50; padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        #dbMeter { width: 100%; height: 35px; background-color: #133B5C; border-radius: 6px; display: block; }
+        .meter-labels { display: flex; justify-content: space-between; color: #F4F6F9; font-size: 0.9rem; font-weight: bold; margin-top: 8px; }
+        details { background: #FFFFFF; border-radius: 10px; margin-bottom: 15px; text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #E0E6ED; }
+        summary { padding: 15px; font-size: 1.1rem; font-weight: bold; cursor: pointer; list-style: none; display: flex; align-items: center; color: #133B5C; }
         summary::before { content: "⚙️ "; margin-right: 8px; }
         .controls-inner { padding: 0 15px 15px 15px; }
-        .controls-inner label { display: block; font-size: 1rem; font-weight: bold; margin-top: 10px; margin-bottom: 5px; }
-        input[type=range] { width: 100%; height: 20px; cursor: pointer; }
-        .checkbox-container { display: flex; align-items: center; font-size: 1rem; font-weight: bold; margin-top: 15px; cursor: pointer; }
-        .checkbox-container input { width: 22px; height: 22px; margin-right: 10px; }
-
-        /* Status i przyciski wypełniające resztę ekranu */
+        .controls-inner label { display: block; font-size: 1rem; font-weight: bold; margin-top: 10px; margin-bottom: 5px; color: #1E5F74; }
+        input[type=range] { width: 100%; height: 20px; cursor: pointer; accent-color: #1E5F74; }
+        .checkbox-container { display: flex; align-items: center; font-size: 1rem; font-weight: bold; margin-top: 15px; cursor: pointer; color: #1E5F74; }
+        .checkbox-container input { width: 22px; height: 22px; margin-right: 10px; accent-color: #1E5F74; }
         .action-area { flex-grow: 1; display: flex; flex-direction: column; justify-content: flex-end; }
-        #status { font-size: 1.4rem; font-weight: bold; color: #555; margin-bottom: auto; padding-top: 10px; min-height: 40px; }
-        
+        #status { font-size: 1.4rem; font-weight: bold; color: #2C3E50; margin-bottom: auto; padding-top: 10px; min-height: 40px; }
         button { font-size: 1.5rem; font-weight: bold; padding: 22px; margin: 8px 0; border: none; border-radius: 12px; cursor: pointer; color: white; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: 0.2s; }
-        button:disabled { background-color: #ccc !important; color: #888; box-shadow: none; }
-        #startBtn { background-color: #d32f2f; }
-        #stopBtn { background-color: #1976d2; }
-        #downloadBtn { background-color: #388e3c; display: none; }
-        
-        .recording { animation: blinker 1.5s linear infinite; color: #d32f2f !important; }
+        button:disabled { background-color: #E0E6ED !important; color: #7f8c8d; box-shadow: none; }
+        #startBtn { background-color: #E63946; }
+        #stopBtn { background-color: #1D2D50; }
+        #downloadBtn { background-color: #2A9D8F; display: none; }
+        .recording { animation: blinker 1.5s linear infinite; color: #E63946 !important; }
         @keyframes blinker { 50% { opacity: 0; } }
     </style>
 </head>
@@ -50,7 +40,7 @@
             <span>30 dB</span>
             <span>50 dB</span>
             <span>70 dB</span>
-            <span style="color: #f44336;">90+ dB</span>
+            <span style="color: #F4A261;">90+ dB</span>
         </div>
     </div>
 
@@ -103,22 +93,20 @@
             for (let i = 0; i < dataArray.length; i++) sumSquares += dataArray[i] * dataArray[i];
             let rms = Math.sqrt(sumSquares / dataArray.length);
             
-            // Mapowanie decybeli dla wskaźnika poziomego
             let db = 20 * Math.log10(Math.max(rms, 0.0001));
             let meterPercent = (db + 60) / 60; 
             if (meterPercent < 0.02) meterPercent = 0.02; if (meterPercent > 1) meterPercent = 1;
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            let grad = ctx.createLinearGradient(0, 0, canvas.width, 0); // Gradient poziomy
-            grad.addColorStop(0, '#4caf50'); 
-            grad.addColorStop(0.5, '#ffeb3b'); 
-            grad.addColorStop(0.85, '#f44336');
+            let grad = ctx.createLinearGradient(0, 0, canvas.width, 0);
+            grad.addColorStop(0, '#2A9D8F'); 
+            grad.addColorStop(0.5, '#F4A261'); 
+            grad.addColorStop(0.85, '#E63946');
             
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, canvas.width * meterPercent, canvas.height);
             
-            // Pionowe podziałki dla lepszego efektu
-            ctx.fillStyle = 'rgba(0,0,0,0.5)';
+            ctx.fillStyle = 'rgba(0,0,0,0.3)';
             for(let i = 0; i < canvas.width; i += 10) ctx.fillRect(i, 0, 2, canvas.height);
         }
 
@@ -157,8 +145,7 @@
             if (mediaRecorder && mediaRecorder.state !== "inactive") { mediaRecorder.stop(); audioCtx.close(); startBtn.disabled = false; stopBtn.disabled = true; autoFilterToggle.disabled = false; }
         });
         
-        // Pusty wskaźnik na start
-        ctx.fillStyle = '#111'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#133B5C'; ctx.fillRect(0, 0, canvas.width, canvas.height);
     </script>
 </body>
 </html>
