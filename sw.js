@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rejestrator-v1';
+const CACHE_NAME = 'rejestrator-v2';
 const urlsToCache = [
   './',
   './index.html',
